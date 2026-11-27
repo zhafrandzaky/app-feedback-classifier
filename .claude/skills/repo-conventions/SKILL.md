@@ -54,6 +54,13 @@ PY
 - `main` is always runnable. Merge through pull requests. Never force push to `main`.
 - PR title follows Conventional Commits. PR body has three sections: Summary, Changes, How to verify. No AI attribution lines.
 
+## Reporting after push or merge
+
+After every push or merge, tell the user:
+
+1. Direct links to the result: the pull request, the commit (`https://github.com/zhafrandzaky/app-feedback-classifier/commit/<sha>`), and the main files changed (`.../blob/main/<path>`).
+2. Clear numbered next steps in Indonesian: what to review or merge, how to import or run the notebook on Kaggle, and what to check in the output.
+
 ## Documentation
 
 - Docs live in `docs/`, written in formal Indonesian, numbered `NN-topic.md`, indexed in `docs/README.md`.

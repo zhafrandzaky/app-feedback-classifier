@@ -118,3 +118,6 @@ Satu commit untuk satu perubahan logis. Ringkasan maksimal 72 karakter.
 - Gunakan skill yang relevan di `.claude/skills/`.
 - Sebelum commit, pastikan identitas Git adalah milik anggota tim dan pesan commit tidak memuat trailer AI.
 - Jangan menjalankan scraping ulang tanpa diminta.
+- Setelah setiap push atau merge, laporkan ke pengguna:
+  - tautan langsung ke hasilnya (pull request, commit, atau file di GitHub);
+  - langkah lanjutan yang jelas dan bernomor (misalnya cara import notebook ke Kaggle, apa yang perlu dicek, apa yang perlu di-merge).
