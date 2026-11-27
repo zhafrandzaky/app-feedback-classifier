@@ -76,7 +76,13 @@ Satu commit untuk satu perubahan logis. Ringkasan maksimal 72 karakter.
 - Sel pertama: judul, tujuan, dan daftar langkah. Sel kedua: konfigurasi (konstanta, path, `RANDOM_STATE = 42`).
 - Setiap bagian kode diawali sel markdown yang menjelaskan apa dan mengapa, karena setiap anggota harus dapat menjelaskan seluruh kode saat tanya jawab.
 - Path memakai konstanta `INPUT_DIR` dan `OUTPUT_DIR`, bukan path tertulis berulang.
-- Notebook harus berjalan dari awal sampai akhir dengan Run All tanpa interaksi. Operasi yang lama atau butuh internet dijaga dengan flag (contoh: `SCRAPE = False`).
+- Notebook harus berjalan dari awal sampai akhir tanpa interaksi dan **tanpa mengubah kode** antara Run All dan Save Version. Tidak ada flag yang harus diganti manual.
+- Mode run dideteksi otomatis dari `os.environ.get('KAGGLE_KERNEL_RUN_TYPE', 'Interactive')`:
+  - `Interactive` (Run All di editor, atau lokal): smoke test dengan data atau iterasi kecil (subset data, sedikit epoch, sedikit ulasan scraping) untuk memastikan semua sel berjalan.
+  - `Batch` (Save Version): full run, hasilnya menjadi output resmi.
+  - Konstanta ukuran ditulis berpasangan di sel konfigurasi, misalnya `EPOCHS = 1 if SMOKE_TEST else 5`, dan mode yang aktif dicetak di awal.
+- Sumber data juga otomatis: jika file yang dibutuhkan sudah ada di `/kaggle/input` (dicari dengan `glob`), file itu dipakai; jika tidak, notebook membuatnya (contoh: notebook 00 scraping jika `scraped_reviews_all.csv` belum ada).
+- Output Save Version dijadikan Kaggle Dataset atau ditambahkan langsung sebagai Input notebook berikutnya.
 - Bersihkan output yang sangat panjang sebelum commit. Output tabel dan grafik ringkas boleh disimpan karena dipakai untuk laporan.
 - Panduan rinci ada di skill `.claude/skills/kaggle-nlp-notebook/`.
 

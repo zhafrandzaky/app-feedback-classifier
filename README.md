@@ -60,10 +60,10 @@ Penjelasan tiap tahap ada di [docs/](docs/README.md).
 Semua notebook dirancang untuk Kaggle.
 
 1. Buat notebook baru di Kaggle, lalu impor file dari folder `notebooks/` (File, Import Notebook).
-2. Untuk notebook 00, aktifkan Internet (Settings, Internet on) dan jalankan sekali dengan `SCRAPE = True`.
-3. Unggah `scraped_reviews_all.csv` hasil scraping sebagai Kaggle Dataset, tambahkan sebagai Input, lalu ubah ke `SCRAPE = False`.
-4. Jalankan Save Version (Save and Run All) agar output tersimpan dan dapat direproduksi.
-5. Notebook berikutnya membaca output notebook sebelumnya melalui Input Kaggle.
+2. Untuk notebook 00, aktifkan Internet (Settings, Internet on).
+3. Opsional: Run All di editor sebagai smoke test singkat (data kecil).
+4. Save Version (Save and Run All) untuk full run. Kode tidak perlu diubah; notebook mendeteksi mode dari `KAGGLE_KERNEL_RUN_TYPE`.
+5. Jadikan output versi tersebut Kaggle Dataset (tab Output, New Dataset) atau tambahkan langsung sebagai Input notebook berikutnya.
 
 Detail alur kerja Kaggle ada di [docs/08-kaggle-workflow.md](docs/08-kaggle-workflow.md).
 

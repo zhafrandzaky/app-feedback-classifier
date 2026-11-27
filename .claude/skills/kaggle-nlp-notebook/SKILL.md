@@ -27,7 +27,25 @@ The notebooks are graded and every team member is questioned at random about any
 
 - Set `random_state` / `seed` everywhere: `train_test_split`, `sample`, models, Word2Vec (`seed=42, workers=1`).
 - Locate inputs with `glob.glob(f'{INPUT_DIR}/**/<file>.csv', recursive=True)` and fail with a clear message if not found.
-- Long or networked work is behind a flag (`SCRAPE = False` by default). Save Version must run with no internet and no user input.
+- Never require a code edit between Run All and Save Version. No manual flags.
+- Detect the run mode in the configuration cell:
+  ```python
+  import os
+  RUN_TYPE = os.environ.get('KAGGLE_KERNEL_RUN_TYPE', 'Interactive')   # 'Interactive' = editor or local, 'Batch' = Save Version
+  SMOKE_TEST = RUN_TYPE != 'Batch'
+  print(f'RUN_TYPE: {RUN_TYPE} -> {"SMOKE TEST" if SMOKE_TEST else "FULL RUN"}')
+  ```
+- Every expensive size has a smoke value and a full value next to each other, for example:
+  ```python
+  SAMPLE_SIZE = 2000 if SMOKE_TEST else None     # None = all rows
+  EPOCHS = 1 if SMOKE_TEST else 5
+  MAX_STEPS = 50 if SMOKE_TEST else -1            # Hugging Face Trainer
+  N_ESTIMATORS = 50 if SMOKE_TEST else 300
+  ```
+  The smoke test must exercise every cell (training, evaluation, plots, saving) on the small setting, so a passing Run All means Save Version will not crash.
+- Inputs are detected automatically: search with `glob` under `INPUT_DIR`. If an expected intermediate file exists, reuse it; otherwise produce it (notebook 00 scrapes only when `scraped_reviews_all.csv` is not already an input). Fail with a clear Indonesian message when a required input is missing.
+- Copy reused intermediate files into `OUTPUT_DIR` so each version's output is self-contained and can become the next Kaggle Dataset.
+- Official results (numbers in docs and the report) come only from a Save Version (`Batch`) run.
 - Do not keep state that depends on cell execution order. Run All from a fresh kernel must work.
 
 ## Output for the report
@@ -57,6 +75,6 @@ See `docs/04-preprocessing.md` to `docs/07-word-embedding.md` for the detailed p
 
 ## Before handing over
 
-- Run All in a fresh kernel (or state clearly that it has not been run and why).
+- Run All in a fresh kernel as the smoke test (or state clearly that it has not been run and why).
 - Clear very long outputs. Keep compact tables and figures.
 - Update `notebooks/README.md` status and the matching doc in `docs/`.

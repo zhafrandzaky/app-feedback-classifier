@@ -35,7 +35,7 @@ Lalu buka pull request ke `main`. Minimal satu anggota lain meninjau sebelum dig
 
 ## Checklist sebelum pull request
 
-- [ ] Notebook berjalan penuh dengan Run All di Kaggle.
+- [ ] Smoke test (Run All) dan Save Version berhasil di Kaggle tanpa mengubah kode.
 - [ ] Tidak ada file data besar, model, `kaggle.json`, atau `.env` yang ikut ter-commit.
 - [ ] Dokumentasi di `docs/` diperbarui jika pipeline, label, atau dataset berubah.
 - [ ] Tidak ada emoji di kode, dokumen, atau pesan commit.

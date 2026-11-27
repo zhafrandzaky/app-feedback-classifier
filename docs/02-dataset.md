@@ -21,7 +21,8 @@ Notebook: `notebooks/00_scraping_dataset.ipynb`.
 - Ulasan diambil per bintang 1 sampai 5 dengan `filter_score_with`, urutan `Sort.NEWEST`, target `REVIEWS_PER_STAR = 8000` per aplikasi per bintang. Pengambilan per bintang menjaga keragaman topik: bintang rendah kaya keluhan bug, performa, dan keamanan, sedangkan bintang tinggi lebih sering memuat pujian tampilan dan usulan fitur.
 - Google Play mengembalikan sekitar 200 ulasan per permintaan, sehingga notebook mengulang dengan `continuation_token` sampai target tercapai atau ulasan habis.
 - Jeda `time.sleep(0.3)` antar permintaan agar tidak membebani server.
-- Flag `SCRAPE`: `True` untuk scraping baru (butuh Internet di Kaggle), `False` untuk membaca `scraped_reviews_all.csv` dari Input Kaggle. Save Version selalu memakai `SCRAPE = False` agar hasil stabil.
+- Tanpa flag manual. Jika `scraped_reviews_all.csv` sudah ada di Input Kaggle, file itu dibaca dan scraping dilewati. Jika belum ada, notebook melakukan scraping (butuh Internet di Kaggle).
+- Mode run otomatis dari `KAGGLE_KERNEL_RUN_TYPE`: Run All di editor (`Interactive`) adalah smoke test dengan 200 ulasan per bintang per aplikasi, Save Version (`Batch`) adalah full run dengan 8.000 ulasan per bintang per aplikasi. Dataset resmi selalu berasal dari Save Version.
 
 ## Filter awal
 
@@ -46,7 +47,7 @@ Uji awal di lingkungan pengembangan dengan sekitar 3.000 ulasan nyata menunjukka
 
 | Berkas | Dihasilkan oleh | Kolom | Keterangan |
 |---|---|---|---|
-| `scraped_reviews_all.csv` | Notebook 00, `SCRAPE = True` | `review_id, app, app_id, rating, date, text, thumbs_up` | Semua ulasan mentah sebelum filter. Diunggah sebagai Kaggle Dataset. |
+| `scraped_reviews_all.csv` | Notebook 00 | `review_id, app, app_id, rating, date, text, thumbs_up` | Semua ulasan mentah sebelum filter. Ikut di Output setiap versi, sehingga versi berikutnya dapat memakainya tanpa scraping ulang. |
 | `raw_dataset.csv` | Notebook 00 | `text, label, app, rating, date` | Dataset berlabel, teks masih asli. |
 | `clean_dataset_part1.csv` | Notebook 01 (rencana) | `text, clean_text, label` (ditambah kolom bantu) | Hasil preprocessing. |
 | `link_dataset.txt` | Notebook 00 | Teks | Daftar URL sumber data. |
