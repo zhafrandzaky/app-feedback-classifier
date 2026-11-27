@@ -30,6 +30,7 @@ Notebook: `notebooks/00_scraping_dataset.ipynb`.
 2. Rapikan spasi dan baris baru (isi teks tidak diubah).
 3. Buang ulasan kurang dari 3 kata (`MIN_WORDS = 3`) karena terlalu pendek untuk menunjukkan topik.
 4. Buang duplikat berdasarkan teks huruf kecil.
+5. Buang spam template: ulasan yang memuat rangkaian 8 kata yang sama persis dengan minimal 10 ulasan lain (copy-paste promosi referral dengan sedikit variasi).
 
 ## Pelabelan
 
@@ -43,18 +44,19 @@ Pelabelan otomatis berbasis kata kunci berbobot, lalu diperiksa manual per label
 
 ### Hasil pelabelan
 
-| Label | Versi 1 Kaggle (aturan awal, terbaru saja) | Aturan revisi, terbaru saja (simulasi lokal) | Aturan revisi, terbaru + relevan (simulasi lokal) |
+| Label | Versi 1 Kaggle (aturan awal, terbaru saja) | Versi 2 Kaggle (revisi 1, terbaru + relevan) | Revisi 2, data versi 2 (simulasi lokal) |
 |---|---:|---:|---:|
-| Bug Aplikasi | 8.880 | 10.246 | 18.235 |
-| Performa Aplikasi | 3.272 | 3.350 | 6.613 |
-| Keamanan Aplikasi | 2.449 | 1.793 | 3.697 |
-| Desain Antarmuka | 347 | 929 | 3.014 |
-| Permintaan Fitur | 462 | 694 | 2.393 |
-| Total | 15.410 | 17.012 | 33.952 |
+| Bug Aplikasi | 8.880 | 18.238 | 18.142 |
+| Performa Aplikasi | 3.272 | 6.612 | 5.626 |
+| Keamanan Aplikasi | 2.449 | 3.697 | 3.575 |
+| Permintaan Fitur | 462 | 2.393 | 1.761 |
+| Desain Antarmuka | 347 | 3.014 | 831 |
+| Total | 15.410 | 33.954 | 29.935 |
 
-- Versi 1 adalah Save Version notebook `00-scraping-dataset-app-feedback` (151.850 ulasan mentah).
-- Kolom tengah adalah aturan revisi pada `scraped_reviews_all.csv` versi 1 (102.708 ulasan setelah filter awal). Kolom kanan menambah 93.499 ulasan relevan unik hasil scraping 27 Nov 2026 di luar Kaggle (total 245.349 mentah, 195.110 setelah filter awal). Angka resmi menunggu Save Version berikutnya; jumlah ulasan relevan dapat sedikit berbeda karena Google Play terus berubah.
-- Desain Antarmuka dan Permintaan Fitur memang jarang di sumber data: hanya sekitar 390 ulasan mentah yang memuat kata "tampil" dan sekitar 2.600 yang memuat "fitur". Ketidakseimbangan yang tersisa ditangani di notebook 03.
+- Versi 1 dan versi 2 adalah Save Version notebook `00-scraping-dataset-app-feedback`. Versi 2 berisi 245.361 ulasan mentah unik (151.850 terbaru dan 151.850 relevan, sebagian tumpang tindih).
+- Kolom kanan adalah aturan revisi 2 pada `scraped_reviews_all.csv` dan `scraped_reviews_relevant.csv` versi 2, dijalankan di luar Kaggle (194.759 ulasan setelah filter awal termasuk buang spam template). Angka resmi menunggu Save Version berikutnya.
+- Revisi 2 sengaja mengurangi jumlah demi kebersihan label: pujian umum "mudah digunakan" tidak lagi masuk Desain Antarmuka, saran non-fitur (saldo, limit, biaya admin) dan ajakan "jangan pakai" tidak lagi masuk Permintaan Fitur, dan sekitar 350 ulasan spam template dibuang.
+- Ketidakseimbangan (Bug sekitar 22 kali Desain) ditangani di notebook 03 dengan `class_weight='balanced'` dan metrik macro.
 
 ## Berkas dan skema
 
