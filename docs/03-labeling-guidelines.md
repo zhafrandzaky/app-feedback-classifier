@@ -94,5 +94,6 @@ Bagian 8 notebook 00 menampilkan 10 ulasan acak per label. Prosedur:
 |---|---|---|
 | 27 Nov 2026 | Versi awal kamus `KEYWORDS`, `MIN_SCORE = 3`, `MIN_MARGIN = 2` | Uji awal pada sekitar 3.000 ulasan nyata |
 | 27 Nov 2026 | Revisi 1: pola Permintaan Fitur lebih ketat (permintaan harus menyebut fitur, menu, opsi, atau kata kerja "ditambahkan"; "semoga bisa" saja tidak cukup), pola Desain Antarmuka diperluas (kemudahan pemakaian, iklan yang mengganggu, ukuran tulisan, tema), label bantu `Lainnya`, normalisasi awalan `di` dan akhiran `-nya`, `MIN_WORDS` 5 menjadi 3 | Save Version 1 di Kaggle: Desain 347 dan Permintaan Fitur 462 dari 15.410, serta banyak salah label pada Permintaan Fitur. Simulasi pada data yang sama: Desain 929, Permintaan Fitur 694 dari 17.012 |
+| 27 Nov 2026 | Tambah sumber ulasan `Sort.MOST_RELEVANT` (8.000 per bintang per aplikasi), digabung dengan ulasan terbaru | Permintaan Fitur dan Desain Antarmuka jarang di ulasan terbaru. Simulasi: Desain 3.014 dan Permintaan Fitur 2.393 dari 33.952 |
 
 Tambahkan baris baru setiap kali kamus atau ambang diubah.

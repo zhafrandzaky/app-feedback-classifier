@@ -18,10 +18,10 @@ Package id diverifikasi ulang di notebook 00 melalui `resolve_app_id`. Jika pack
 Notebook: `notebooks/00_scraping_dataset.ipynb`.
 
 - Library: [`google-play-scraper`](https://pypi.org/project/google-play-scraper/) (tidak resmi).
-- Ulasan diambil per bintang 1 sampai 5 dengan `filter_score_with`, urutan `Sort.NEWEST`, target `REVIEWS_PER_STAR = 8000` per aplikasi per bintang. Pengambilan per bintang menjaga keragaman topik: bintang rendah kaya keluhan bug, performa, dan keamanan, sedangkan bintang tinggi lebih sering memuat pujian tampilan dan usulan fitur.
+- Ulasan diambil per bintang 1 sampai 5 dengan `filter_score_with` dari dua urutan, `Sort.NEWEST` (ulasan terbaru) dan `Sort.MOST_RELEVANT` (ulasan paling relevan menurut Google Play), masing-masing target `REVIEWS_PER_STAR = 8000` per aplikasi per bintang. Pengambilan per bintang menjaga keragaman topik: bintang rendah kaya keluhan bug, performa, dan keamanan, sedangkan bintang tinggi lebih sering memuat pujian tampilan dan usulan fitur. Urutan relevan ditambahkan setelah versi 1 karena ulasannya lebih panjang dan lebih sering berisi usulan fitur dan penilaian tampilan. Ulasan yang muncul di kedua urutan hanya diambil sekali (berdasarkan `review_id`).
 - Google Play mengembalikan sekitar 200 ulasan per permintaan, sehingga notebook mengulang dengan `continuation_token` sampai target tercapai atau ulasan habis.
 - Jeda `time.sleep(0.3)` antar permintaan agar tidak membebani server.
-- Tanpa flag manual. Jika `scraped_reviews_all.csv` sudah ada di Input Kaggle, file itu dibaca dan scraping dilewati. Jika belum ada, notebook melakukan scraping (butuh Internet di Kaggle).
+- Tanpa flag manual. `scraped_reviews_all.csv` (terbaru) dan `scraped_reviews_relevant.csv` (relevan) dicek terpisah di Input Kaggle. File yang sudah ada dibaca, file yang belum ada di-scraping (butuh Internet di Kaggle).
 - Mode run otomatis dari `KAGGLE_KERNEL_RUN_TYPE`: Run All di editor (`Interactive`) adalah smoke test dengan 200 ulasan per bintang per aplikasi, Save Version (`Batch`) adalah full run dengan 8.000 ulasan per bintang per aplikasi. Dataset resmi selalu berasal dari Save Version.
 
 ## Filter awal
@@ -43,25 +43,26 @@ Pelabelan otomatis berbasis kata kunci berbobot, lalu diperiksa manual per label
 
 ### Hasil pelabelan
 
-| Label | Versi 1 Kaggle (aturan awal) | Aturan revisi, simulasi lokal |
-|---|---:|---:|
-| Bug Aplikasi | 8.880 | 10.246 |
-| Performa Aplikasi | 3.272 | 3.350 |
-| Keamanan Aplikasi | 2.449 | 1.793 |
-| Desain Antarmuka | 347 | 929 |
-| Permintaan Fitur | 462 | 694 |
-| Total | 15.410 | 17.012 |
+| Label | Versi 1 Kaggle (aturan awal, terbaru saja) | Aturan revisi, terbaru saja (simulasi lokal) | Aturan revisi, terbaru + relevan (simulasi lokal) |
+|---|---:|---:|---:|
+| Bug Aplikasi | 8.880 | 10.246 | 18.235 |
+| Performa Aplikasi | 3.272 | 3.350 | 6.613 |
+| Keamanan Aplikasi | 2.449 | 1.793 | 3.697 |
+| Desain Antarmuka | 347 | 929 | 3.014 |
+| Permintaan Fitur | 462 | 694 | 2.393 |
+| Total | 15.410 | 17.012 | 33.952 |
 
 - Versi 1 adalah Save Version notebook `00-scraping-dataset-app-feedback` (151.850 ulasan mentah).
-- Kolom kanan adalah hasil menjalankan aturan revisi pada `scraped_reviews_all.csv` versi 1 di luar Kaggle (102.708 ulasan setelah filter awal). Angka resmi menunggu Save Version berikutnya.
+- Kolom tengah adalah aturan revisi pada `scraped_reviews_all.csv` versi 1 (102.708 ulasan setelah filter awal). Kolom kanan menambah 93.499 ulasan relevan unik hasil scraping 27 Nov 2026 di luar Kaggle (total 245.349 mentah, 195.110 setelah filter awal). Angka resmi menunggu Save Version berikutnya; jumlah ulasan relevan dapat sedikit berbeda karena Google Play terus berubah.
 - Desain Antarmuka dan Permintaan Fitur memang jarang di sumber data: hanya sekitar 390 ulasan mentah yang memuat kata "tampil" dan sekitar 2.600 yang memuat "fitur". Ketidakseimbangan yang tersisa ditangani di notebook 03.
 
 ## Berkas dan skema
 
 | Berkas | Dihasilkan oleh | Kolom | Keterangan |
 |---|---|---|---|
-| `scraped_reviews_all.csv` | Notebook 00 | `review_id, app, app_id, rating, date, text, thumbs_up` | Semua ulasan mentah sebelum filter. Ikut di Output setiap versi, sehingga versi berikutnya dapat memakainya tanpa scraping ulang. |
-| `raw_dataset.csv` | Notebook 00 | `text, label, app, rating, date` | Dataset berlabel, teks masih asli. |
+| `scraped_reviews_all.csv` | Notebook 00 | `review_id, app, app_id, rating, date, text, thumbs_up` | Ulasan mentah urutan terbaru sebelum filter. Ikut di Output setiap versi, sehingga versi berikutnya dapat memakainya tanpa scraping ulang. |
+| `scraped_reviews_relevant.csv` | Notebook 00 | sama dengan di atas | Ulasan mentah urutan paling relevan, diperlakukan sama. |
+| `raw_dataset.csv` | Notebook 00 | `text, label, app, rating, date, source` | Dataset berlabel, teks masih asli. |
 | `clean_dataset_part1.csv` | Notebook 01 (rencana) | `text, clean_text, label` (ditambah kolom bantu) | Hasil preprocessing. |
 | `link_dataset.txt` | Notebook 00 | Teks | Daftar URL sumber data. |
 

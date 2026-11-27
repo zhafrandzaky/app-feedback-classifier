@@ -37,7 +37,7 @@ Notebook mencari file yang dibutuhkan di `/kaggle/input` dengan `glob`. Jika ada
 
 ```
 00_scraping_dataset      Save Version (scraping penuh di dalam versi)
-        |                -> raw_dataset.csv, scraped_reviews_all.csv, link_dataset.txt
+        |                -> raw_dataset.csv, scraped_reviews_all.csv, scraped_reviews_relevant.csv, link_dataset.txt
         |                -> Output dijadikan Kaggle Dataset
         v
 01_eda_preprocessing     -> clean_dataset_part1.csv
@@ -60,7 +60,7 @@ Notebook mencari file yang dibutuhkan di `/kaggle/input` dengan `glob`. Jika ada
 5. Setelah versi selesai, buka tab Output versi tersebut, lalu New Dataset (misalnya `ewallet-reviews-kelompok2`). Alternatifnya, Output notebook dapat langsung ditambahkan sebagai Input di notebook lain (Add Input, Notebooks).
 6. Laporkan distribusi label dari output ke tim dan catat di `docs/02-dataset.md`.
 
-Jika notebook 00 perlu dijalankan ulang (misalnya kamus kata kunci diperbaiki) tanpa scraping ulang, tambahkan dataset dari langkah 5 sebagai Input. Notebook otomatis membaca `scraped_reviews_all.csv` dari Input dan melewati scraping.
+Jika notebook 00 perlu dijalankan ulang (misalnya kamus kata kunci diperbaiki) tanpa scraping ulang, tambahkan dataset dari langkah 5 sebagai Input. Notebook otomatis membaca `scraped_reviews_all.csv` dan `scraped_reviews_relevant.csv` dari Input dan hanya melakukan scraping untuk file yang belum ada.
 
 ## Menghubungkan notebook berikutnya
 
