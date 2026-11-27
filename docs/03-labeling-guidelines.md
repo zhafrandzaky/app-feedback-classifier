@@ -31,7 +31,8 @@ Fungsi yang seharusnya berjalan ternyata tidak berjalan: error, crash, keluar se
 
 Tampilan dan pengalaman penggunaan: tata letak, warna, ukuran huruf, ikon, tombol, navigasi, kemudahan dipahami, mode gelap.
 
-- Penanda: "tampilan", "desain", "UI", "tata letak", "tombol", "warna", "ribet", "membingungkan", "user friendly".
+- Penanda: "tampilan", "desain", "UI", "tata letak", "tombol", "warna", "mode gelap", "membingungkan", "user friendly", "mudah digunakan", "susah dicari", "terlalu banyak iklan".
+- Ulasan pujian kemudahan pemakaian ("mudah digunakan", "praktis dipakai") termasuk label ini karena membahas pengalaman penggunaan.
 - Contoh ilustrasi: "Tampilan baru membingungkan, menu riwayat susah dicari."
 - Bukan label ini: "Tombol bayar tidak bisa ditekan" (fungsi rusak, maka Bug Aplikasi).
 
@@ -57,7 +58,7 @@ Contoh di atas adalah ilustrasi buatan untuk menjelaskan definisi, bukan kutipan
 
 ### Normalisasi khusus pelabelan
 
-Sebelum pencocokan kata kunci, teks dinormalisasi sementara: huruf kecil, hapus URL, huruf berulang dipendekkan (`lemooot` menjadi `lemoot`), simbol dan emoji diganti spasi, slang dipetakan ke kata baku melalui kamus `SLANG` (`gk` menjadi `tidak`, `apk` menjadi `aplikasi`). Hasil normalisasi hanya dipakai untuk pencocokan. Kolom `text` tetap teks asli.
+Sebelum pencocokan kata kunci, teks dinormalisasi sementara: huruf kecil, hapus URL, huruf berulang dipendekkan (`lemooot` menjadi `lemoot`), simbol dan emoji diganti spasi, awalan `di` yang terpisah disambung untuk kata kerja umum (`di tambahkan` menjadi `ditambahkan`), akhiran `-nya` dilepas dari kata minimal 6 huruf (`fiturnya` menjadi `fitur`), slang dipetakan ke kata baku melalui kamus `SLANG` (`gk` menjadi `tidak`, `apk` menjadi `aplikasi`). Hasil normalisasi hanya dipakai untuk pencocokan. Kolom `text` tetap teks asli.
 
 ### Kata kunci berbobot
 
@@ -68,6 +69,7 @@ Setiap label memiliki daftar pola regex dengan bobot:
 | 3 | Sangat khas label | `lemot` untuk Performa, `diretas` untuk Keamanan, `fitur baru` untuk Permintaan Fitur |
 | 2 | Cukup khas | `loading`, `pin` atau `otp`, `warna` atau `tombol` |
 | 1 | Petunjuk lemah, hanya membantu jika ada petunjuk lain | `fitur`, `cepat`, `aman` |
+| 4-5 | Penanda yang hampir pasti | `tambahkan fitur`, `dark mode`, `dibobol` |
 
 ### Penentuan label
 
@@ -75,6 +77,7 @@ Setiap label memiliki daftar pola regex dengan bobot:
 2. Label pemenang adalah skor tertinggi.
 3. Ulasan dibuang jika skor tertinggi kurang dari `MIN_SCORE = 3` (tidak cukup bukti).
 4. Ulasan dibuang jika selisih skor tertinggi dan kedua kurang dari `MIN_MARGIN = 2` (ambigu).
+5. Label bantu `Lainnya` ikut bersaing skor tetapi tidak pernah masuk dataset. Polanya menandai topik di luar aplikasi: biaya admin, promo dan koin, paylater atau pinjaman, status dan upgrade akun, layanan CS, paket data, ajakan ke pengguna lain ("saran saya jangan pakai"), komentar soal bintang, dan teks berbahasa Inggris. Ulasan yang dimenangkan `Lainnya` atau terlalu dekat skornya ikut dibuang.
 
 ## Pemeriksaan manual
 
@@ -90,5 +93,6 @@ Bagian 8 notebook 00 menampilkan 10 ulasan acak per label. Prosedur:
 | Tanggal | Perubahan | Alasan |
 |---|---|---|
 | 27 Nov 2026 | Versi awal kamus `KEYWORDS`, `MIN_SCORE = 3`, `MIN_MARGIN = 2` | Uji awal pada sekitar 3.000 ulasan nyata |
+| 27 Nov 2026 | Revisi 1: pola Permintaan Fitur lebih ketat (permintaan harus menyebut fitur, menu, opsi, atau kata kerja "ditambahkan"; "semoga bisa" saja tidak cukup), pola Desain Antarmuka diperluas (kemudahan pemakaian, iklan yang mengganggu, ukuran tulisan, tema), label bantu `Lainnya`, normalisasi awalan `di` dan akhiran `-nya`, `MIN_WORDS` 5 menjadi 3 | Save Version 1 di Kaggle: Desain 347 dan Permintaan Fitur 462 dari 15.410, serta banyak salah label pada Permintaan Fitur. Simulasi pada data yang sama: Desain 929, Permintaan Fitur 694 dari 17.012 |
 
 Tambahkan baris baru setiap kali kamus atau ambang diubah.

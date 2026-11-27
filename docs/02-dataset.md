@@ -28,7 +28,7 @@ Notebook: `notebooks/00_scraping_dataset.ipynb`.
 
 1. Buang ulasan kosong.
 2. Rapikan spasi dan baris baru (isi teks tidak diubah).
-3. Buang ulasan kurang dari 5 kata (`MIN_WORDS = 5`) karena terlalu pendek untuk menunjukkan topik.
+3. Buang ulasan kurang dari 3 kata (`MIN_WORDS = 3`) karena terlalu pendek untuk menunjukkan topik.
 4. Buang duplikat berdasarkan teks huruf kecil.
 
 ## Pelabelan
@@ -41,7 +41,20 @@ Pelabelan otomatis berbasis kata kunci berbobot, lalu diperiksa manual per label
 - `MAX_PER_LABEL = None` tersedia sebagai opsi jika suatu saat diperlukan pembatasan.
 - Ketidakseimbangan kelas ditangani di tahap pemodelan (notebook 03) dengan `class_weight='balanced'` dan evaluasi per kelas (precision, recall, F1, macro average).
 
-Uji awal di lingkungan pengembangan dengan sekitar 3.000 ulasan nyata menunjukkan sekitar 14 persen ulasan lolos pelabelan, dengan Bug Aplikasi sekitar 50 persen dan Desain Antarmuka paling sedikit (sekitar 7 persen). Angka final menunggu scraping penuh di Kaggle.
+### Hasil pelabelan
+
+| Label | Versi 1 Kaggle (aturan awal) | Aturan revisi, simulasi lokal |
+|---|---:|---:|
+| Bug Aplikasi | 8.880 | 10.246 |
+| Performa Aplikasi | 3.272 | 3.350 |
+| Keamanan Aplikasi | 2.449 | 1.793 |
+| Desain Antarmuka | 347 | 929 |
+| Permintaan Fitur | 462 | 694 |
+| Total | 15.410 | 17.012 |
+
+- Versi 1 adalah Save Version notebook `00-scraping-dataset-app-feedback` (151.850 ulasan mentah).
+- Kolom kanan adalah hasil menjalankan aturan revisi pada `scraped_reviews_all.csv` versi 1 di luar Kaggle (102.708 ulasan setelah filter awal). Angka resmi menunggu Save Version berikutnya.
+- Desain Antarmuka dan Permintaan Fitur memang jarang di sumber data: hanya sekitar 390 ulasan mentah yang memuat kata "tampil" dan sekitar 2.600 yang memuat "fitur". Ketidakseimbangan yang tersisa ditangani di notebook 03.
 
 ## Berkas dan skema
 
