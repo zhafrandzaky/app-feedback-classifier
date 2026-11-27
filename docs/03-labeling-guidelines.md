@@ -1,0 +1,94 @@
+# 03. Pedoman Pelabelan
+
+Dokumen ini menjadi acuan tunggal arti setiap label, baik untuk aturan otomatis di notebook 00, pemeriksaan manual, maupun penjelasan saat presentasi.
+
+## Prinsip umum
+
+- Satu ulasan, satu label: topik utama yang paling ingin disampaikan pengguna kepada pengembang.
+- Label menggambarkan aspek aplikasi, bukan sentimen. Ulasan positif tentang tampilan tetap Desain Antarmuka.
+- Ulasan yang tidak membahas aplikasi (layanan pelanggan, promo, cashback, biaya admin, kurir, kebijakan perusahaan) tidak dilabeli dan dibuang.
+- Ulasan yang dua topiknya sama kuat dianggap ambigu dan dibuang.
+
+## Definisi label
+
+### Permintaan Fitur
+
+Pengguna mengusulkan sesuatu yang belum ada: fitur, menu, opsi, metode pembayaran, integrasi.
+
+- Penanda: "tolong ditambahkan", "semoga ada fitur", "saran", "kenapa tidak ada opsi", "fitur ... dong".
+- Contoh ilustrasi: "Saran saja, tolong ditambahkan fitur split bill biar gampang bayar bareng teman."
+- Bukan label ini: "Fitur transfer error terus" (fiturnya ada tetapi rusak, maka Bug Aplikasi).
+
+### Bug Aplikasi
+
+Fungsi yang seharusnya berjalan ternyata tidak berjalan: error, crash, keluar sendiri, gagal proses, saldo terpotong tetapi transaksi gagal, tidak bisa dibuka setelah update.
+
+- Penanda: "error", "bug", "force close", "keluar sendiri", "tidak bisa dibuka", "gagal transaksi", "setelah update".
+- Contoh ilustrasi: "Setelah update kemarin aplikasinya keluar sendiri tiap buka menu riwayat."
+- Bukan label ini: "Buka aplikasinya lama sekali" (berjalan tetapi lambat, maka Performa Aplikasi).
+
+### Desain Antarmuka
+
+Tampilan dan pengalaman penggunaan: tata letak, warna, ukuran huruf, ikon, tombol, navigasi, kemudahan dipahami, mode gelap.
+
+- Penanda: "tampilan", "desain", "UI", "tata letak", "tombol", "warna", "ribet", "membingungkan", "user friendly".
+- Contoh ilustrasi: "Tampilan baru membingungkan, menu riwayat susah dicari."
+- Bukan label ini: "Tombol bayar tidak bisa ditekan" (fungsi rusak, maka Bug Aplikasi).
+
+### Performa Aplikasi
+
+Kecepatan dan efisiensi aplikasi saat berjalan: lambat, lemot, lag, hang, loading lama, boros baterai atau memori, ukuran aplikasi besar, server sibuk.
+
+- Penanda: "lemot", "lambat", "lag", "hang", "loading lama", "berat", "boros baterai", "server down".
+- Contoh ilustrasi: "Aplikasinya berat dan lemot, loading saldo saja bisa satu menit."
+- Bukan label ini: "Loading terus lalu muncul terjadi kesalahan" (berakhir dengan error, cenderung Bug Aplikasi; diputuskan oleh skor).
+
+### Keamanan Aplikasi
+
+Keamanan akun dan data pengguna: akun diretas atau dibobol, saldo hilang tanpa transaksi, penipuan, OTP, PIN, verifikasi wajah atau KTP, privasi data.
+
+- Penanda: "keamanan", "diretas", "dibobol", "saldo hilang", "penipuan", "OTP", "PIN", "verifikasi", "data pribadi".
+- Contoh ilustrasi: "Saldo saya hilang padahal tidak pernah transaksi, akun sepertinya dibobol."
+- Bukan label ini: "OTP tidak masuk-masuk" (pengiriman gagal, aturan memberi bobot ke Bug Aplikasi).
+
+Contoh di atas adalah ilustrasi buatan untuk menjelaskan definisi, bukan kutipan dataset.
+
+## Aturan otomatis di notebook 00
+
+### Normalisasi khusus pelabelan
+
+Sebelum pencocokan kata kunci, teks dinormalisasi sementara: huruf kecil, hapus URL, huruf berulang dipendekkan (`lemooot` menjadi `lemoot`), simbol dan emoji diganti spasi, slang dipetakan ke kata baku melalui kamus `SLANG` (`gk` menjadi `tidak`, `apk` menjadi `aplikasi`). Hasil normalisasi hanya dipakai untuk pencocokan. Kolom `text` tetap teks asli.
+
+### Kata kunci berbobot
+
+Setiap label memiliki daftar pola regex dengan bobot:
+
+| Bobot | Arti | Contoh |
+|---|---|---|
+| 3 | Sangat khas label | `lemot` untuk Performa, `diretas` untuk Keamanan, `fitur baru` untuk Permintaan Fitur |
+| 2 | Cukup khas | `loading`, `pin` atau `otp`, `warna` atau `tombol` |
+| 1 | Petunjuk lemah, hanya membantu jika ada petunjuk lain | `fitur`, `cepat`, `aman` |
+
+### Penentuan label
+
+1. Skor tiap label adalah jumlah bobot pola yang cocok.
+2. Label pemenang adalah skor tertinggi.
+3. Ulasan dibuang jika skor tertinggi kurang dari `MIN_SCORE = 3` (tidak cukup bukti).
+4. Ulasan dibuang jika selisih skor tertinggi dan kedua kurang dari `MIN_MARGIN = 2` (ambigu).
+
+## Pemeriksaan manual
+
+Bagian 8 notebook 00 menampilkan 10 ulasan acak per label. Prosedur:
+
+1. Setiap anggota memeriksa minimal satu label dan mencatat jumlah label yang benar dari sampel.
+2. Pola salah label yang berulang diperbaiki di kamus `KEYWORDS` (tambah pola, kurangi pola, atau ubah bobot), lalu bagian 6 dijalankan ulang.
+3. Ganti `random_state` untuk melihat sampel lain.
+4. Catat perkiraan ketepatan label per kelas di laporan sebagai bagian dari keterbatasan.
+
+## Riwayat perubahan aturan
+
+| Tanggal | Perubahan | Alasan |
+|---|---|---|
+| 27 Nov 2026 | Versi awal kamus `KEYWORDS`, `MIN_SCORE = 3`, `MIN_MARGIN = 2` | Uji awal pada sekitar 3.000 ulasan nyata |
+
+Tambahkan baris baru setiap kali kamus atau ambang diubah.

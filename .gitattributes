@@ -1,0 +1,8 @@
+* text=auto eol=lf
+*.ipynb text eol=lf linguist-language=Jupyter
+*.csv text eol=lf
+*.docx binary
+*.pptx binary
+*.png binary
+*.jpg binary
+*.pdf binary

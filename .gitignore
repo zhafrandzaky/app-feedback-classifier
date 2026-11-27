@@ -1,0 +1,101 @@
+# ---------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.conda/
+
+# ---------------------------------------------------------------
+# Jupyter / Kaggle
+# ---------------------------------------------------------------
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/
+kaggle.json
+.kaggle/
+
+# ---------------------------------------------------------------
+# Data and model artefacts
+# Dataset final disimpan di Kaggle Dataset. Hanya file kecil yang
+# disengaja (sampel, kamus) boleh masuk repo; lihat data/README.md.
+# ---------------------------------------------------------------
+data/raw/*
+data/processed/*
+data/external/*
+!data/**/.gitkeep
+!data/**/README.md
+
+models/*
+!models/.gitkeep
+!models/README.md
+*.pkl
+*.joblib
+*.h5
+*.keras
+*.pt
+*.pth
+*.bin
+*.onnx
+*.safetensors
+*.model
+*.wv
+*.npy
+wandb/
+mlruns/
+lightning_logs/
+
+# ---------------------------------------------------------------
+# Laporan dan presentasi (dikumpulkan terpisah, bukan di repo)
+# ---------------------------------------------------------------
+reports/*.docx
+reports/*.pptx
+reports/*.pdf
+~$*
+
+# ---------------------------------------------------------------
+# Aplikasi Part 2 (Node / Flutter / React Native)
+# ---------------------------------------------------------------
+node_modules/
+.next/
+out/
+.expo/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+coverage/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---------------------------------------------------------------
+# Rahasia dan konfigurasi lokal
+# ---------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.pem
+.claude/settings.local.json
+
+# ---------------------------------------------------------------
+# Sistem operasi dan editor
+# ---------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
