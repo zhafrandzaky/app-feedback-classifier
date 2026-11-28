@@ -40,7 +40,7 @@ Rumus TF-IDF yang dijelaskan di laporan: `tfidf(t, d) = tf(t, d) * idf(t)`, deng
 4. Nilai IDF terkecil dan terbesar.
 5. Ketahanan typo: cosine similarity pasangan kata benar dan salah ketik pada TF-IDF kata dan char n-gram.
 6. Tabel perbandingan: jumlah fitur, nilai bukan nol, sparsity, fitur aktif per ulasan, memori, vektor uji kosong, persentase term uji di luar kosakata, waktu fit.
-7. Term teratas per label menurut rata-rata TF-IDF dan chi-square (satu label melawan label lain), dengan grafik.
+7. Term teratas per label menurut rata-rata TF-IDF dan chi-square (satu label melawan label lain). Grafiknya menampilkan skor chi-square sepuluh term pembeda teratas per label, sehingga panjang batang sesuai urutan peringkat.
 8. Proyeksi 2D `TruncatedSVD` dari TF-IDF kata, diwarnai per label.
 
 ## Artefak untuk notebook 03
