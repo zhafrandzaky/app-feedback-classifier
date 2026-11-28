@@ -43,7 +43,7 @@ Notebook mencari file yang dibutuhkan di `/kaggle/input` dengan `glob`. Jika ada
 01_eda_preprocessing     -> clean_dataset_part1.csv
         |
         v
-02_feature_extraction    -> matriks BoW dan TF-IDF, indeks split
+02_text_representation  -> dataset_split.csv (split latih dan uji), representation_config.json
         |
         v
 03_classical_ml          -> metrik, confusion matrix, model terbaik
@@ -70,6 +70,15 @@ Jika notebook 00 perlu dijalankan ulang (misalnya kamus kata kunci diperbaiki) t
 4. Opsional: Run All sebagai smoke test (sampel berstrata 3.000 ulasan).
 5. Save Version (Save and Run All). Seluruh ulasan diproses; seluruh notebook selesai dalam beberapa menit.
 6. Output berisi `clean_dataset_part1.csv`, `raw_dataset.csv`, `preprocessing_examples.csv`, `preprocessing_stats.csv`, `typo_corrections.csv`, dan folder `figures/`. Output ini menjadi Input notebook 02 dan 04.
+
+## Langkah notebook 02
+
+1. Impor `notebooks/02_text_representation.ipynb` ke notebook Kaggle `02-text-representation-app-feedback` (File, Import Notebook).
+2. Add Input, Datasets, pilih `app-feedback-ewallet-clean` (Output notebook 01). Notebook mencari `clean_dataset_part1.csv` secara rekursif di `/kaggle/input`.
+3. Internet tidak diperlukan; seluruh library sudah tersedia di Kaggle.
+4. Opsional: Run All sebagai smoke test. Split tetap dihitung pada seluruh data, tetapi vectorizer hanya di-fit pada sampel berstrata 3.000 ulasan latih dan 750 ulasan uji.
+5. Save Version (Save and Run All). Seluruh data latih dan uji dipakai; notebook selesai dalam hitungan menit.
+6. Output berisi `dataset_split.csv`, `representation_config.json`, `feature_summary.csv`, `top_terms_per_label.csv`, `sparse_examples.csv`, `typo_similarity.csv`, dan folder `figures/`. `dataset_split.csv` dan `representation_config.json` menjadi Input notebook 03.
 
 ## Menghubungkan notebook berikutnya
 
