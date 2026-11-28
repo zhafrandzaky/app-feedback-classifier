@@ -56,7 +56,8 @@ Pelabelan otomatis berbasis kata kunci berbobot, lalu diperiksa manual per label
 - Versi 1 dan versi 2 adalah Save Version notebook `00-scraping-dataset-app-feedback`. Versi 2 berisi 245.361 ulasan mentah unik (151.850 terbaru dan 151.850 relevan, sebagian tumpang tindih).
 - Kolom kanan adalah aturan revisi 2 pada `scraped_reviews_all.csv` dan `scraped_reviews_relevant.csv` versi 2, dijalankan di luar Kaggle (194.759 ulasan setelah filter awal termasuk buang spam template). Angka resmi menunggu Save Version berikutnya.
 - Revisi 2 sengaja mengurangi jumlah demi kebersihan label: pujian umum "mudah digunakan" tidak lagi masuk Desain Antarmuka, saran non-fitur (saldo, limit, biaya admin) dan ajakan "jangan pakai" tidak lagi masuk Permintaan Fitur, dan sekitar 350 ulasan spam template dibuang.
-- Ketidakseimbangan (Bug sekitar 22 kali Desain) ditangani di notebook 03 dengan `class_weight='balanced'` dan metrik macro.
+- Revisi 3 (28 Nov 2026) memperbaiki pola salah label yang ditemukan pada data versi 3 (lihat [03-labeling-guidelines.md](03-labeling-guidelines.md)). Simulasi lokal pada data scraping yang sama: 30.208 berlabel (Bug 18.673, Performa 5.503, Keamanan 3.541, Permintaan Fitur 1.721, Desain 770). Angka resmi menunggu Save Version notebook 00 berikutnya.
+- Ketidakseimbangan (Bug sekitar 24 kali Desain) ditangani di notebook 03 dengan `class_weight='balanced'` dan metrik macro.
 
 ## Berkas dan skema
 
