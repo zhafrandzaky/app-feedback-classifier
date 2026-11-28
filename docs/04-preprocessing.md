@@ -48,7 +48,7 @@ Perbedaan dengan notebook 00: di notebook 00 huruf berulang dipendekkan menjadi 
 ## Normalisasi slang
 
 - Kamus `SLANG` berupa dictionary Python di notebook, sehingga dapat ditinjau langsung.
-- Inti kamus diambil dari kamus `SLANG` notebook 00 agar pelabelan dan preprocessing konsisten, lalu ditambah kata tidak baku yang sering muncul di dataset ini (misalnya `udh`, `skrg`, `tetep`, `nunggu`, `ilang`, `betulin`).
+- Inti kamus diambil dari kamus `SLANG` notebook 00 agar pelabelan dan preprocessing konsisten, lalu ditambah kata tidak baku yang sering muncul di dataset ini (misalnya `udh`, `skrg`, `tetep`, `nunggu`, `ilang`, `betulin`) dan kata tidak dikenal yang paling sering tersisa di `clean_text` (misalnya `gimna`, `krna`, `jngn`, `stiap`, `pdahal`). Kamus berisi sekitar 310 entri.
 - Pemetaan notebook 00 yang khusus untuk pelabelan dan berisiko mengubah makna tidak dipakai. Contohnya `kasih` menjadi `beri` tidak dipakai karena akan mengubah `terima kasih`.
 - Kamus publik seperti [colloquial-indonesian-lexicon](https://github.com/nasalsabila/kamus-alay) tidak dipakai agar notebook tidak bergantung pada unduhan saat dijalankan dan setiap pemetaan dapat dijelaskan.
 
@@ -83,14 +83,16 @@ Kamus slang hanya menangani singkatan yang sudah diketahui. Salah ketik yang tid
 | `lama`, `cepat`, `lambat`, `gagal`, `baru` | Penanda performa, bug, dan pembaruan |
 
 - Token satu huruf (sisa singkatan seperti `d`, `x`) ikut dibuang.
+- `melakukan`, `lakukan`, dan `dilakukan` dijadikan stopword. Dalam "melakukan transaksi" makna ada pada `transaksi`, dan jika di-stem kata ini menjadi `laku` yang berarti lain.
 
 ## Stemming
 
 - Library: [Sastrawi](https://github.com/har07/PySastrawi) (algoritma Nazief dan Adriani).
 - Setiap kata unik di-stem sekali, lalu hasilnya disimpan di `stem_cache` dan dipetakan ke semua ulasan.
 - Sastrawi bawaan menyimpan kamus kata dasar sebagai list, sehingga setiap pengecekan menelusuri sekitar 30.000 kata dan satu kata bisa memerlukan puluhan milidetik. Notebook mengubah kamus itu menjadi set (`stemmer.delegatedStemmer.dictionary.words = set(...)`). Hasil stemming sama persis, tetapi waktu stemming seluruh data turun dari sekitar 854 detik (Save Version 1 di Kaggle) menjadi di bawah 1 detik pada uji lokal.
-- `STEM_PROTECT`: kata yang tidak di-stem karena Sastrawi salah memotongnya atau karena istilah teknis, misalnya `lemot` (Sastrawi menghasilkan `lot`), `jaringan` (menjadi `jaring`), `error`, `login`, `otp`, `qris`.
-- `STEM_OVERRIDE`: kata yang hasil stem-nya ditetapkan manual. `perbaiki`, `diperbaiki`, dan `perbaikan` oleh Sastrawi menjadi `baik`, sehingga permintaan perbaikan tercampur dengan pujian. Semuanya dipetakan ke `perbaiki`.
+- `STEM_PROTECT`: kata yang tidak di-stem karena Sastrawi salah memotongnya, karena istilah teknis, atau karena maknanya berubah jika di-stem. Contoh: `lemot` (Sastrawi menghasilkan `lot`), `jaringan` (`jaring`), `menarik` (`tarik`, padahal di ulasan desain berarti bagus), `kejadian` (`jadi`), `alasan` (`alas`), `sebelah` (`belah`), `masukan` (saran, menjadi `masuk`), `pengguna` (`guna`), serta `error`, `login`, `otp`, `qris`.
+- `STEM_OVERRIDE`: kata yang hasil stem-nya ditetapkan manual. `perbaiki`, `diperbaiki`, dan `perbaikan` oleh Sastrawi menjadi `baik`, sehingga permintaan perbaikan tercampur dengan pujian; semuanya dipetakan ke `perbaiki`. Contoh lain: `berikan` (Sastrawi: `ikan`) menjadi `beri`, `memasukan` (`pasu`) menjadi `masuk`, `penarikan` (`tari`) menjadi `tarik`, `persetujuan` (`tuju`) menjadi `setuju`.
+- Pelepasan `-nya` pada kata serapan: Sastrawi hanya melepas akhiran jika kata dasarnya ada di kamus, sehingga `fiturnya`, `servernya`, dan `notifnya` tidak berubah. Jika Sastrawi tidak mengubah kata berakhiran `-nya`, akhiran dilepas, sisanya dibakukan dengan `SLANG`, lalu di-stem ulang (`notifnya` menjadi `notifikasi`). Salah ketik satu `n` (`coinya`) dikembalikan ke bentuk yang lebih sering di data (`coin`).
 - Contoh hasil yang masih kurang tepat dicatat sebagai bahan diskusi, misalnya `pengguna` dan `menggunakan` sama-sama menjadi `guna`, dan `keamanan` menjadi `aman`.
 
 ## Output
@@ -123,6 +125,10 @@ Kolom tahap antara (`cleaned`, `corrected`, `tokens`, dan seterusnya) tidak disi
 - Ciri noise pada teks mentah: huruf kapital, URL, angka, emoji, tanda baca berulang, huruf berulang, kata slang.
 - Contoh ulasan per label.
 - Kata terbanyak sebelum preprocessing, lalu kata terbanyak dan word cloud per label setelah preprocessing.
+
+## Pemeriksaan kualitas `clean_text`
+
+`clean_text` sengaja tidak terbaca seperti kalimat normal: stopword dibuang, imbuhan dilepas, dan angka serta tanda baca hilang. Yang diperiksa adalah apakah kata yang tersisa masih mewakili makna ulasan. Pemeriksaan sampel acak per label menemukan masalah sistematis yang sudah diperbaiki (stem yang mengubah makna, slang dan typo yang sering, akhiran `-nya` pada kata serapan). Sisa yang wajar: beberapa kata tidak baku yang jarang, nama merek atau game, dan sebagian kecil koreksi typo yang keliru (seluruhnya tercatat di `typo_corrections.csv`).
 
 ## Hasil
 
