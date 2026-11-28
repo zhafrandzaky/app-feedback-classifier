@@ -35,4 +35,6 @@ Notebook: `notebooks/04_word_embedding.ipynb` (direncanakan).
 | FastText | Memakai subkata, tahan terhadap salah ketik dan slang | Model lebih besar |
 | GloVe | Memakai statistik kemunculan global | Umumnya memakai model pralatih bahasa Inggris |
 
+Rencana: notebook 04 melatih FastText (`gensim.models.FastText`) dengan parameter yang sama sebagai pembanding Word2Vec, termasuk contoh kata typo yang tetap mendapat vektor dekat dengan kata aslinya.
+
 Untuk Part 2, rata-rata vektor kata dapat dicoba sebagai fitur klasifikasi pembanding TF-IDF.

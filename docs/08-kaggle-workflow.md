@@ -66,10 +66,10 @@ Jika notebook 00 perlu dijalankan ulang (misalnya kamus kata kunci diperbaiki) t
 
 1. Impor `notebooks/01_eda_preprocessing.ipynb` ke notebook Kaggle `01-eda-preprocessing-app-feedback` (File, Import Notebook).
 2. Add Input, Datasets, pilih `app-feedback-ewallet-reviews`. Notebook mencari `raw_dataset.csv` secara rekursif di `/kaggle/input`, jadi nama folder tidak berpengaruh.
-3. Settings, Internet: On, karena `Sastrawi` dipasang dengan `pip` di dalam notebook.
-4. Opsional: Run All sebagai smoke test (sampel berstrata 3.000 ulasan, sekitar 1 sampai 2 menit).
-5. Save Version (Save and Run All). Seluruh ulasan diproses; stemming adalah tahap terlama.
-6. Output berisi `clean_dataset_part1.csv`, `raw_dataset.csv`, `preprocessing_examples.csv`, `preprocessing_stats.csv`, dan folder `figures/`. Output ini menjadi Input notebook 02 dan 04.
+3. Settings, Internet: On, karena `Sastrawi` (dan `rapidfuzz` bila belum ada) dipasang dengan `pip` di dalam notebook.
+4. Opsional: Run All sebagai smoke test (sampel berstrata 3.000 ulasan).
+5. Save Version (Save and Run All). Seluruh ulasan diproses; seluruh notebook selesai dalam beberapa menit.
+6. Output berisi `clean_dataset_part1.csv`, `raw_dataset.csv`, `preprocessing_examples.csv`, `preprocessing_stats.csv`, `typo_corrections.csv`, dan folder `figures/`. Output ini menjadi Input notebook 02 dan 04.
 
 ## Menghubungkan notebook berikutnya
 

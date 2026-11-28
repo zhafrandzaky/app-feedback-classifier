@@ -17,10 +17,11 @@ Notebook 00 sudah membuang duplikat persis. Notebook 01 juga membuang ulasan yan
 | 1 | Case folding | `case_folded` | Semua huruf menjadi kecil |
 | 2 | Regex cleaning | `cleaned` | Hapus URL, tag HTML, mention, emoji, angka, simbol, huruf berulang, spasi berlebih |
 | 3 | Normalisasi slang | `normalized` | Peta kata tidak baku ke baku dengan kamus `SLANG` |
-| 4 | Tokenisasi | `tokens` | Memecah kalimat menjadi daftar kata dengan `str.split()` |
-| 5 | Stopword removal | `tokens_nostop` | Membuang kata umum dan token satu huruf, negasi dipertahankan |
-| 6 | Stemming | `tokens_stemmed` | Mengubah kata berimbuhan menjadi kata dasar dengan Sastrawi |
-| 7 | Gabung | `clean_text` | Token akhir digabung dengan spasi, baris kosong dibuang |
+| 4 | Koreksi typo | `corrected` | Kata langka yang tidak dikenal diganti kata sering yang paling mirip (jarak edit) |
+| 5 | Tokenisasi | `tokens` | Memecah kalimat menjadi daftar kata dengan `str.split()` |
+| 6 | Stopword removal | `tokens_nostop` | Membuang kata umum dan token satu huruf, negasi dipertahankan |
+| 7 | Stemming | `tokens_stemmed` | Mengubah kata berimbuhan menjadi kata dasar dengan Sastrawi |
+| 8 | Gabung | `clean_text` | Token akhir digabung dengan spasi, baris kosong dibuang |
 
 Normalisasi slang ditempatkan sebelum stopword removal agar `gk` menjadi `tidak` terlebih dahulu dan diperlakukan dengan benar oleh daftar stopword.
 
@@ -51,6 +52,22 @@ Perbedaan dengan notebook 00: di notebook 00 huruf berulang dipendekkan menjadi 
 - Pemetaan notebook 00 yang khusus untuk pelabelan dan berisiko mengubah makna tidak dipakai. Contohnya `kasih` menjadi `beri` tidak dipakai karena akan mengubah `terima kasih`.
 - Kamus publik seperti [colloquial-indonesian-lexicon](https://github.com/nasalsabila/kamus-alay) tidak dipakai agar notebook tidak bergantung pada unduhan saat dijalankan dan setiap pemetaan dapat dijelaskan.
 
+## Koreksi typo
+
+Kamus slang hanya menangani singkatan yang sudah diketahui. Salah ketik yang tidak disengaja (`trnsaksi`, `jangn`, `updte`, `oengembalian`) ditangani dengan koreksi berbasis jarak edit, setelah normalisasi slang dan sebelum stopword removal.
+
+- Jarak: *Optimal String Alignment* (OSA), yaitu jumlah minimum operasi sisip, hapus, ganti satu huruf, atau tukar dua huruf bersebelahan. Dihitung dengan library `rapidfuzz`.
+- Kata `w` dikoreksi menjadi `k` hanya jika:
+  1. `w` tidak dikenal: tidak ada di kamus kata dasar Sastrawi (sekitar 30.000 kata), bukan stopword, bukan istilah domain atau nama aplikasi (`DOMAIN_WORDS`), dan Sastrawi tidak menemukan kata dasarnya;
+  2. `w` langka (paling banyak 10 kali) dan minimal 5 huruf;
+  3. `k` sering (minimal 20 kali), dikenal, dan minimal 10 kali lebih sering dari `w`;
+  4. jarak paling banyak 1, atau 2 untuk kata minimal 9 huruf;
+  5. huruf pertama sama;
+  6. hanya ada satu kandidat terbaik (jika ambigu, kata dibiarkan).
+- `TYPO_MANUAL`: typo sering yang tidak tertangkap aturan (misalnya `oengembalian`, `ufgrate`, `msalah`). `TYPO_IGNORE`: kata yang tidak boleh dikoreksi (nama tempat dan merek seperti `pertamina`, serta kasus yang terbukti salah).
+- Seluruh pasangan disimpan di `typo_corrections.csv` (typo, koreksi, sumber, jarak, frekuensi) untuk diperiksa dan dilampirkan di laporan.
+- Keterbatasan: koreksi tidak sempurna untuk bahasa informal. Typo yang lolos direncanakan ditangani lagi oleh TF-IDF char n-gram (notebook 02) dan FastText (notebook 04).
+
 ## Stopword
 
 - Daftar dasar: stopword Bahasa Indonesia dari Sastrawi.
@@ -69,7 +86,8 @@ Perbedaan dengan notebook 00: di notebook 00 huruf berulang dipendekkan menjadi 
 ## Stemming
 
 - Library: [Sastrawi](https://github.com/har07/PySastrawi) (algoritma Nazief dan Adriani).
-- Setiap kata unik di-stem sekali, lalu hasilnya disimpan di `stem_cache` dan dipetakan ke semua ulasan. Kata unik dibagi ke beberapa proses CPU (`multiprocessing`) karena Sastrawi memerlukan sekitar 10 sampai 60 milidetik per kata baru.
+- Setiap kata unik di-stem sekali, lalu hasilnya disimpan di `stem_cache` dan dipetakan ke semua ulasan.
+- Sastrawi bawaan menyimpan kamus kata dasar sebagai list, sehingga setiap pengecekan menelusuri sekitar 30.000 kata dan satu kata bisa memerlukan puluhan milidetik. Notebook mengubah kamus itu menjadi set (`stemmer.delegatedStemmer.dictionary.words = set(...)`). Hasil stemming sama persis, tetapi waktu stemming seluruh data turun dari sekitar 854 detik (Save Version 1 di Kaggle) menjadi di bawah 1 detik pada uji lokal.
 - `STEM_PROTECT`: kata yang tidak di-stem karena Sastrawi salah memotongnya atau karena istilah teknis, misalnya `lemot` (Sastrawi menghasilkan `lot`), `jaringan` (menjadi `jaring`), `error`, `login`, `otp`, `qris`.
 - `STEM_OVERRIDE`: kata yang hasil stem-nya ditetapkan manual. `perbaiki`, `diperbaiki`, dan `perbaikan` oleh Sastrawi menjadi `baik`, sehingga permintaan perbaikan tercampur dengan pujian. Semuanya dipetakan ke `perbaiki`.
 - Contoh hasil yang masih kurang tepat dicatat sebagai bahan diskusi, misalnya `pengguna` dan `menggunakan` sama-sama menjadi `guna`, dan `keamanan` menjadi `aman`.
@@ -82,9 +100,10 @@ Perbedaan dengan notebook 00: di notebook 00 huruf berulang dipendekkan menjadi 
 | `raw_dataset.csv` | Salinan Input, agar Output lengkap untuk folder pengumpulan |
 | `preprocessing_examples.csv` | Tabel before/after lima contoh ulasan |
 | `preprocessing_stats.csv` | Jumlah kata unik dan rata-rata kata per ulasan di setiap tahap |
+| `typo_corrections.csv` | Pasangan typo dan koreksi beserta sumber, jarak, dan frekuensi |
 | `figures/*.png` | Grafik EDA, 200 dpi |
 
-Kolom tahap antara (`cleaned`, `tokens`, dan seterusnya) tidak disimpan karena dapat dibuat ulang dari notebook. Ulasan yang `clean_text`-nya kosong dibuang. Ulasan dengan `clean_text` yang sama tetapi teks aslinya berbeda tetap dipertahankan (umumnya ulasan pendek seperti "aplikasi lemot").
+Kolom tahap antara (`cleaned`, `corrected`, `tokens`, dan seterusnya) tidak disimpan karena dapat dibuat ulang dari notebook. Ulasan yang `clean_text`-nya kosong dibuang. Ulasan dengan `clean_text` yang sama tetapi teks aslinya berbeda tetap dipertahankan (umumnya ulasan pendek seperti "aplikasi lemot").
 
 ## Tabel wajib untuk laporan
 
@@ -92,6 +111,7 @@ Kolom tahap antara (`cleaned`, `tokens`, dan seterusnya) tidak disimpan karena d
 2. Tabel token: daftar token setelah tokenisasi, setelah stopword removal, dan setelah stemming.
 3. Penjelasan setiap pola regex (tabel di atas, juga di notebook bagian 6.2).
 4. Statistik per tahap: jumlah kata unik dan rata-rata kata per ulasan.
+5. Tabel koreksi typo dan contoh ulasan sebelum dan sesudah koreksi.
 
 ## EDA yang dilakukan di notebook yang sama
 

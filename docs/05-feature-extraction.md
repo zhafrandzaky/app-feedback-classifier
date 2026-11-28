@@ -20,6 +20,8 @@ Notebook: `notebooks/02_feature_extraction.ipynb` (direncanakan). Input: `clean_
 - Bobot kata = frekuensi kata dalam dokumen dikali kebalikan frekuensi dokumen yang memuatnya. Kata yang muncul di hampir semua ulasan (misalnya `aplikasi`) mendapat bobot kecil.
 - Rumus yang dijelaskan di laporan: `tfidf(t, d) = tf(t, d) * idf(t)`, dengan `idf(t) = ln((1 + n) / (1 + df(t))) + 1` (default scikit-learn, `smooth_idf=True`), lalu normalisasi L2.
 
+- Rencana tambahan: TF-IDF berbasis potongan huruf (`analyzer='char_wb'`, misalnya `ngram_range=(3, 5)`) sebagai pembanding TF-IDF kata. Potongan huruf seperti `err` dan `ror` membuat `eror` dan `error` tetap mirip, sehingga typo yang lolos koreksi di notebook 01 masih dikenali.
+
 ## Yang ditampilkan
 
 1. Jumlah fitur (ukuran kosakata) untuk BoW dan TF-IDF, unigram dan bigram.
