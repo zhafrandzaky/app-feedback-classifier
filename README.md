@@ -48,7 +48,7 @@ app-feedback-classifier/
 | No | Notebook | Isi | Status |
 |---|---|---|---|
 | 00 | `00_scraping_dataset.ipynb` | Scraping ulasan Google Play, filter, pelabelan berbasis kata kunci | Selesai, menunggu uji di Kaggle |
-| 01 | `01_eda_preprocessing.ipynb` | EDA, case folding, regex cleaning, tokenisasi, stopword, stemming, normalisasi slang | Direncanakan |
+| 01 | `01_eda_preprocessing.ipynb` | EDA, case folding, regex cleaning, tokenisasi, stopword, stemming, normalisasi slang | Selesai ditulis, menunggu Save Version di Kaggle |
 | 02 | `02_feature_extraction.ipynb` | Bag of Words dan TF-IDF | Direncanakan |
 | 03 | `03_classical_ml.ipynb` | Naive Bayes, SVM, Logistic Regression, Random Forest | Direncanakan |
 | 04 | `04_word_embedding.ipynb` | Word2Vec, kemiripan kata, visualisasi PCA atau t-SNE | Direncanakan |

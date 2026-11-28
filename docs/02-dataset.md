@@ -65,7 +65,7 @@ Pelabelan otomatis berbasis kata kunci berbobot, lalu diperiksa manual per label
 | `scraped_reviews_all.csv` | Notebook 00 | `review_id, app, app_id, rating, date, text, thumbs_up` | Ulasan mentah urutan terbaru sebelum filter. Ikut di Output setiap versi, sehingga versi berikutnya dapat memakainya tanpa scraping ulang. |
 | `scraped_reviews_relevant.csv` | Notebook 00 | sama dengan di atas | Ulasan mentah urutan paling relevan, diperlakukan sama. |
 | `raw_dataset.csv` | Notebook 00 | `text, label, app, rating, date, source` | Dataset berlabel, teks masih asli. |
-| `clean_dataset_part1.csv` | Notebook 01 (rencana) | `text, clean_text, label` (ditambah kolom bantu) | Hasil preprocessing. |
+| `clean_dataset_part1.csv` | Notebook 01 | `text, clean_text, label, app, rating, source` | Hasil preprocessing. Ulasan hampir kembar dan ulasan dengan `clean_text` kosong dibuang. |
 | `link_dataset.txt` | Notebook 00 | Teks | Daftar URL sumber data. |
 
 Kolom wajib tugas adalah `text` dan `label`. Kolom lain dipakai untuk EDA.

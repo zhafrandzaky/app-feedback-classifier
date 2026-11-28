@@ -23,8 +23,9 @@ Dokumentasi teknis dan non-teknis untuk proyek App Feedback Classifier, Kelompok
 
 | Komponen | Status |
 |---|---|
-| Notebook 00 scraping dan pelabelan | Selesai ditulis, belum dijalankan penuh di Kaggle |
-| Notebook 01 sampai 04 | Direncanakan |
+| Notebook 00 scraping dan pelabelan | Selesai, Save Version 3 menjadi dataset `app-feedback-ewallet-reviews` |
+| Notebook 01 EDA dan preprocessing | Selesai ditulis, menunggu Save Version di Kaggle |
+| Notebook 02 sampai 04 | Direncanakan |
 | Laporan Part 1 | Belum dimulai |
 | Part 2 | Menunggu konfirmasi asisten praktikum |
 

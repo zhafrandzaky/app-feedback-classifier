@@ -62,6 +62,15 @@ Notebook mencari file yang dibutuhkan di `/kaggle/input` dengan `glob`. Jika ada
 
 Jika notebook 00 perlu dijalankan ulang (misalnya kamus kata kunci diperbaiki) tanpa scraping ulang, tambahkan dataset dari langkah 5 sebagai Input. Notebook otomatis membaca `scraped_reviews_all.csv` dan `scraped_reviews_relevant.csv` dari Input dan hanya melakukan scraping untuk file yang belum ada.
 
+## Langkah notebook 01
+
+1. Impor `notebooks/01_eda_preprocessing.ipynb` ke notebook Kaggle `01-eda-preprocessing-app-feedback` (File, Import Notebook).
+2. Add Input, Datasets, pilih `app-feedback-ewallet-reviews`. Notebook mencari `raw_dataset.csv` secara rekursif di `/kaggle/input`, jadi nama folder tidak berpengaruh.
+3. Settings, Internet: On, karena `Sastrawi` dipasang dengan `pip` di dalam notebook.
+4. Opsional: Run All sebagai smoke test (sampel berstrata 3.000 ulasan, sekitar 1 sampai 2 menit).
+5. Save Version (Save and Run All). Seluruh ulasan diproses; stemming adalah tahap terlama.
+6. Output berisi `clean_dataset_part1.csv`, `raw_dataset.csv`, `preprocessing_examples.csv`, `preprocessing_stats.csv`, dan folder `figures/`. Output ini menjadi Input notebook 02 dan 04.
+
 ## Menghubungkan notebook berikutnya
 
 - Tambahkan dataset atau Output notebook sebelumnya sebagai Input.
