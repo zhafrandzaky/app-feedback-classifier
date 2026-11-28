@@ -59,11 +59,12 @@ Kamus slang hanya menangani singkatan yang sudah diketahui. Salah ketik yang tid
 - Jarak: *Optimal String Alignment* (OSA), yaitu jumlah minimum operasi sisip, hapus, ganti satu huruf, atau tukar dua huruf bersebelahan. Dihitung dengan library `rapidfuzz`.
 - Kata `w` dikoreksi menjadi `k` hanya jika:
   1. `w` tidak dikenal: tidak ada di kamus kata dasar Sastrawi (sekitar 30.000 kata), bukan stopword, bukan istilah domain atau nama aplikasi (`DOMAIN_WORDS`), dan Sastrawi tidak menemukan kata dasarnya;
-  2. `w` langka (paling banyak 10 kali) dan minimal 5 huruf;
-  3. `k` sering (minimal 20 kali), dikenal, dan minimal 10 kali lebih sering dari `w`;
+  2. `w` langka (paling banyak 10 kali), bukan kata di kamus `SLANG`, dan minimal 4 huruf;
+  3. `k` sering (minimal 20 kali) dan minimal 10 kali lebih sering dari `w`, serta dikenal atau merupakan kata slang di kamus `SLANG` (frekuensi dihitung sebelum normalisasi slang, sehingga `gimna` dapat dikoreksi ke `gimana` lalu dibakukan menjadi `bagaimana`);
   4. jarak paling banyak 1, atau 2 untuk kata minimal 9 huruf;
   5. huruf pertama sama;
-  6. hanya ada satu kandidat terbaik (jika ambigu, kata dibiarkan).
+  6. hanya ada satu kandidat terbaik (jika ambigu, kata dibiarkan);
+  7. untuk kata kurang dari 6 huruf, koreksi hanya boleh menambah huruf yang hilang (`jngn` menjadi `jangan`) atau membuang huruf ganda (`gakk` menjadi `gak`), karena kata pendek berbahasa Inggris (`hard`, `case`, `have`) mudah tertukar dengan kata Indonesia jika satu hurufnya diganti.
 - `TYPO_MANUAL`: typo sering yang tidak tertangkap aturan (misalnya `oengembalian`, `ufgrate`, `msalah`). `TYPO_IGNORE`: kata yang tidak boleh dikoreksi (nama tempat dan merek seperti `pertamina`, serta kasus yang terbukti salah).
 - Seluruh pasangan disimpan di `typo_corrections.csv` (typo, koreksi, sumber, jarak, frekuensi) untuk diperiksa dan dilampirkan di laporan.
 - Keterbatasan: koreksi tidak sempurna untuk bahasa informal. Typo yang lolos direncanakan ditangani lagi oleh TF-IDF char n-gram (notebook 02) dan FastText (notebook 04).
