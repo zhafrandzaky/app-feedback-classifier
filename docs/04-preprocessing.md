@@ -65,7 +65,7 @@ Kamus slang hanya menangani singkatan yang sudah diketahui. Salah ketik yang tid
   5. huruf pertama sama;
   6. hanya ada satu kandidat terbaik (jika ambigu, kata dibiarkan);
   7. untuk kata kurang dari 6 huruf, koreksi hanya boleh menambah huruf yang hilang (`jngn` menjadi `jangan`) atau membuang huruf ganda (`gakk` menjadi `gak`), karena kata pendek berbahasa Inggris (`hard`, `case`, `have`) mudah tertukar dengan kata Indonesia jika satu hurufnya diganti.
-- `TYPO_MANUAL`: typo sering yang tidak tertangkap aturan (misalnya `oengembalian`, `ufgrate`, `msalah`). `TYPO_IGNORE`: kata yang tidak boleh dikoreksi (nama tempat dan merek seperti `pertamina`, serta kasus yang terbukti salah).
+- `TYPO_MANUAL`: typo sering yang tidak tertangkap aturan (misalnya `oengembalian`, `ufgrate`, `msalah`), termasuk sekitar 60 typo yang muncul lebih dari 10 kali sehingga lolos syarat frekuensi (misalnya `tida`, `tdak`, `sring`, `applikasi`, `transper`). Daftar ini dipilih dari pemeriksaan output Kaggle v3: token langka yang berjarak satu huruf dari kata yang sangat sering. Pasangan yang ambigu (`sma`, `back`, `date`, `mail`) sengaja tidak dimasukkan. `TYPO_IGNORE`: kata yang tidak boleh dikoreksi (nama tempat dan merek seperti `pertamina`, serta kasus yang terbukti salah).
 - Seluruh pasangan disimpan di `typo_corrections.csv` (typo, koreksi, sumber, jarak, frekuensi) untuk diperiksa dan dilampirkan di laporan.
 - Keterbatasan: koreksi tidak sempurna untuk bahasa informal. Typo yang lolos direncanakan ditangani lagi oleh TF-IDF char n-gram (notebook 02) dan FastText (notebook 04).
 
